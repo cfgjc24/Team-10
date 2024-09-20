@@ -47,23 +47,39 @@ def create_worker():
     """
     body = json.loads(request.data)
     name = body.get("name", None)
-    boss = body.get("manager", None)
-    check_in = body.get("check_in", None)
-    check_out = body.get("check_out", None)
-    status = body.get("status", None)
+    manager = body.get("manager", None)
 
-    if not name or not boss:
+    if not name or not manager:
         error = "Boss of worker or Name of worker is missing"
         return failure_response(error)
 
-    id = DB.insert_worker_table(name, status, check_in, check_out, boss)
+    id = DB.insert_worker_table(name, manager)
 
-    return success_response(id)
+    return success_response({"id": id})
+
+@app.route("/worker/{id}", methods=["DELETE"])
+def delete_worker(id):
+    """
+    Preconditions: 
+    - assumes id is given in the route
+    - assumes status, check_in and check_out can be null initially
+
+    Endpoint for deleting worker by id
+    """
+    user = DB.get_worker(id)
+    if not user:
+        error = "User not found"
+        return failure_response(error)
+    DB.delete_worker_from_table(id)
+    return success_response({"user": user})
 
 
 @app.route("/workers")
 def get_all_workers():
-    pass
+    workers = DB.get_all_workers()
+    return success_response({"workers": workers})
+
+# @app.route("/u")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

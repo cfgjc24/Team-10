@@ -1,236 +1,114 @@
-from flask_sqlalchemy import SQLAlchemy
+import sqlite3
+from enum import Enum
+import datetime
 import bcrypt
 import datetime
 import hashlib
 import os
 
-db = SQLAlchemy()
+class DatabaseDriver(object):
+    def create_tables(self):
+        self.create_worker_table()
+        # self.create_client_table()
+        # self.create_boss_table()
+        # self.create_location_table()
+        # self.create_appointment_table()
 
-association_table = db.Table(
-    "association",
-    db.Model.metadata,
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
-    db.Column("course_id", db.Integer, db.ForeignKey("course.id")),
-)
+    def __init__(self):
+        self.conn = sqlite3.connect("safety.db")
+        self.cursor = self.conn.cursor()
+        self.create_tables()
 
-
-# your classes here
-class User(db.Model):
-    """
-    User Model
-    """
-
-    __tablename__ = "user"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False, unique=True)
-    password_digest = db.Column(db.String, nullable=False)
-    timers = db.relationship("Timer", cascade="delete")
-    courses = db.relationship(
-        "Course", secondary=association_table, back_populates="users"
-    )
-
-    session_token = db.Column(db.String, nullable=False, unique=False)
-    session_expiration = db.Column(db.DateTime, nullable=False, unique=False)
-    update_token = db.Column(db.String, nullable=False, unique=True)
-
-    def __init__(self, **kwargs):
+    def create_worker_table(self):
         """
-        Initialize User Entry
+        Creates a worker table using SQL
         """
-        self.name = kwargs.get("name")
-        self.password_digest = bcrypt.hashpw(
-            kwargs.get("password_digest").encode("utf8"), bcrypt.gensalt(rounds=13)
-        )
-        self.renew_session()
-
-    def simple_serialize(self):
+        self.conn.execute("""CREATE TABLE IF NOT EXISTS worker(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            manager INTEGER NOT NULL,
+            status TEXT NOT NULL CHECK(status IN ('away', 'approaching', 'arrived')),
+            last_update TIME NULL,
+            check_in TIME NULL,
+            check_out TIME NULL
+        );""")
+    
+        
+    def delete_worker_table(self):
         """
-        Serialize User object without courses or timers
+        Deletes a user table using SQL
         """
-        return {"id": self.id, "name": self.name}
-
-    def session_serialize(self):
-        return {
-            "session_token": self.session_token,
-            "session_expiration": self.session_expiration.timestamp(),
-            "update_token": self.update_token,
-        }
-
-    def serialize(self):
+        self.conn.execute("""DROP TABLE IF EXISTS worker""")
+    
+    def get_all_workers(self):
         """
-        Serialize User object
+        Returns all workers in the table using SQL
         """
-        return {
-            **self.simple_serialize(),
-            "courses": [c.user_data_serialize() for c in self.courses],
-            "timers": [t.simple_serialize() for t in self.timers],
-        }
+        cursor = self.conn.execute("""SELECT * FROM worker""")
+        workers = []
+        for row in cursor:
+            workers.append({"id": row[0], "name": row[1], "manager": row[2], "status": row[3],"last_update": row[4], "check_in": row[5], "check_out": row[6]})
+        return workers
 
-    def serialize_with_session(self):
+    def get_worker_by_id(self, id):
         """
-        Serialize User object with session data
+        Returns a user from the table from its id using SQL
         """
-        return {"session": self.session_serialize(), "user": self.serialize()}
-
-    def _urlsafe_base_64(self):
-        return hashlib.sha1(os.urandom(64)).hexdigest()
-
-    def renew_session(self):
-        self.session_token = self._urlsafe_base_64()
-        self.update_token = self._urlsafe_base_64()
-        self.session_expiration = datetime.datetime.now() + datetime.timedelta(days=1)
-
-    def verify_password(self, password):
-        return bcrypt.checkpw(password.encode("utf8"), self.password_digest)
-
-    def verify_session_token(self, session_token):
-        return (
-            session_token == self.session_token
-            and datetime.datetime.now() < self.session_expiration
-        )
-
-    def verify_update_token(self, update_token):
-        return update_token == self.update_token
+        cursor = self.conn.execute("SELECT * FROM worker WHERE id = ?;",(id,))
+        for row in cursor:
+            return ({"id": row[0], "name": row[1], "manager": row[2], "status": row[3],"last_update": row[4], "check_in": row[5], "check_out": row[6]})
+        return None
 
 
-class Course(db.Model):
-    """
-    Course Model
-    """
-
-    __tablename__ = "course"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    code = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=False)
-    assignments = db.relationship("Assignment", cascade="delete")
-    users = db.relationship(
-        "User", secondary=association_table, back_populates="courses"
-    )
-
-    def __init__(self, **kwargs):
+    def insert_worker_table(self, name, manager_id):
         """
-        Initialize Course Object
+        Inserts a new worker into the worker table with default values for other fields.
         """
-        self.name = kwargs.get("name")
-        self.code = kwargs.get("code")
-        self.description = kwargs.get("description")
+        time_now = datetime.datetime.now()
 
-    def simple_serialize(self):
-        """
-        Serialize Course without assignments or users
-        """
-        return {
-            "id": self.id,
-            "name": self.name,
-            "code": self.code,
-            "description": self.description,
-        }
+        cursor = self.conn.execute("""
+            INSERT INTO worker (name, manager, status, last_update, check_in, check_out)
+            VALUES (?, ?, ?, ?, ?, ?);
+        """, (name, manager_id, 'away', time_now, None, None))
+        
+        self.conn.commit()
+        return cursor.lastrowid
 
-    def user_data_serialize(self):
+    
+    def delete_worker_from_table(self, id):
         """
-        Serialize Course with assignments
+        Deletes a worker from the user table using SQL
         """
-        return {
-            **self.simple_serialize(),
-            "assignments": [a.simple_serialize() for a in self.assignments],
-        }
+        self.conn.execute("DELETE FROM worker WHERE id = ?;", (id,))
+        self.conn.commit()
 
-    def serialize(self):
-        """
-        Serialize Course
-        """
-        return {
-            **self.user_data_serialize(),
-            "users": [u.simple_serialize() for u in self.users],
-        }
+    def update_worker_updated_time(self, id):
+        curr_time = datetime.datetime.now()
+        self.conn.execute("""UPDATE worker
+                          SET last_updated = ?
+                          WHERE id = ?;
+                          """, (curr_time, id))
+        self.conn.commit()
 
 
-class Assignment(db.Model):
-    """
-    Assignment Model
-    """
+    def update_worker_status(self, id, status):
+        self.conn.execute("""UPDATE worker
+                          SET status = ?
+                          WHERE id = ?;
+                          """, (status, id))
+        self.conn.commit()
 
-    __tablename__ = "assignment"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=False)
-    due_date = db.Column(db.Integer, nullable=False)
-    done = db.Column(db.Boolean, nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=False)
-    course = db.relationship("Course", foreign_keys="Assignment.course_id")
+    def update_check_in(self, check_in, id):
+        self.conn.execute("""UPDATE worker
+                          SET check_in = ?
+                          WHERE id = ?;
+                          """, (check_in, id))
+        self.conn.commit()
 
-    def __init__(self, **kwargs):
-        """
-        Initialize Assignment Object
-        """
-        self.name = kwargs.get("name")
-        self.description = kwargs.get("description")
-        self.due_date = kwargs.get("due_date")
-        self.done = kwargs.get("done")
-        self.course_id = kwargs.get("course_id")
+    def update_check_out(self, check_out, id):
+        self.conn.execute("""UPDATE worker
+                          SET check_out = ?
+                          WHERE id = ?;
+                          """, (check_out, id))
+        self.conn.commit()
 
-    def simple_serialize(self):
-        """
-        Serialize Assignment without course
-        """
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "due_date": self.due_date,
-            "done": self.done,
-            "course_id": self.course_id,
-        }
-
-    def serialize(self):
-        """
-        Serialize Assignment
-        """
-        return {**self.simple_serialize()}
-
-
-class Timer(db.Model):
-    """
-    Timer Model
-    """
-
-    __tablename__ = "timer"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    elapsed_time = db.Column(db.Integer, nullable=False)
-    hours = db.Column(db.Integer, nullable=False)
-    minutes = db.Column(db.Integer, nullable=False)
-    seconds = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    user = db.relationship("User", foreign_keys="Timer.user_id")
-
-    def __init__(self, **kwargs):
-        """
-        Initialize Assignment Object
-        """
-        self.elapsed_time = kwargs.get("elapsed_time")
-        self.hours = kwargs.get("hours")
-        self.minutes = kwargs.get("minutes")
-        self.seconds = kwargs.get("seconds")
-        self.date = kwargs.get("date")
-        self.user_id = kwargs.get("user_id")
-
-    def simple_serialize(self):
-        """
-        Serialize Assignment without course
-        """
-        return {
-            "id": self.id,
-            "elapsed_time": self.elapsed_time,
-            "hours": self.hours,
-            "minutes": self.minutes,
-            "seconds": self.seconds,
-            "date": self.date,
-        }
-
-    def serialize(self):
-        """
-        Serialize Assignment
-        """
-        return {**self.simple_serialize(), "user": self.user.simple_serialize()}
