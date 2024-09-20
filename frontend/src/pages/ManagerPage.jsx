@@ -1,8 +1,9 @@
 import React from 'react'
+import EmployeeMap from '../components/EmployeeMap';
 
 const ManagerPage = () => {
   return (
-    <div>ManagerPage</div>
+    <div><EmployeeMap></EmployeeMap></div>
   )
 }
 

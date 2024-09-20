@@ -1,9 +1,8 @@
-import EmployeeMap from "../components/EmployeeMap"
 function AdminPage() {
 
   return (
     <>
-      <EmployeeMap></EmployeeMap>
+      
     </>
   )
 }

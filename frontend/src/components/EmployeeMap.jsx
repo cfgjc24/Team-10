@@ -25,19 +25,25 @@ export default function EmployeeMap() {
     useEffect(() => {
     if (map) {
       //testing
-      const employeeLocation = [40.6084, -73.9574];
+    const employeeLocations = [
+        [40.6084, -73.9574],
+        [40.7128, -74.0060],
+        [34.0522, -118.2437], //test for LA
+    ];
       
-      // creating a customized icon
-      const customIcon = L.icon({
+    // creating a customized icon
+    const customIcon = L.icon({
         iconUrl: './hospitalmarker.png',
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32] 
+    });
+    // now ima add the marker
+      employeeLocations.forEach((location) => {
+        L.marker(location, { icon: customIcon })
+          .addTo(map)
+          .bindPopup("Data");
       });
-      // now ima add the marker
-      L.marker(employeeLocation, { icon: customIcon })
-        .addTo(map)
-        .bindPopup("Data")
     }
   }, [map]);
 
