@@ -10,14 +10,15 @@ class WorkerManager:
         """
         Creates a worker table using SQL
         """
-        self.conn.execute("""CREATE TABLE IF NOT EXISTS worker(
+        self.conn.execute("""CREATE TABLE IF NOT EXISTS workers(
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 name TEXT NOT NULL,
-                                manager INTEGER FOREIGN KEY NOT NULL,
+                                manager INTEGER NOT NULL,
                                 status TEXT CHECK(status IN ('away', 'approaching', 'arrived')) NOT NULL, 
-                                last_update TIME null,
-                                check_in TIME null,
-                                check_out TIME null
+                                last_update TIME NOT NULL,
+                                check_in TIME NULL,
+                                check_out TIME NULL,
+                                FOREIGN KEY(manager) REFERENCES managers[id]
                             );""")
         self.conn.commit()
 
