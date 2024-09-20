@@ -22,5 +22,5 @@
 
 #buttons {
     display: flex;
-    flex-direction=
+    flex-direction: row;
 }
