@@ -1,5 +1,3 @@
-import datetime
-
 class ClientManager:
     def __init__(self, conn):
         self.conn = conn
@@ -37,7 +35,7 @@ class ClientManager:
         """
         Returns a client by its ID
         """
-        cursor = self.conn.execute("SELECT * FROM client WHERE id = ?;", (client_id,))
+        cursor = self.conn.execute("SELECT * FROM client WHERE id = ?;", (client_id))
         for row in cursor:
             return ({"id": row[0], "name": row[1], "description": row[2], "over_eighteen": row[3]})
         return None
@@ -58,7 +56,7 @@ class ClientManager:
         """
         Deletes a worker from the worker table using SQL
         """
-        self.conn.execute("DELETE FROM clients WHERE id = ?;", (client_id,))
+        self.conn.execute("DELETE FROM clients WHERE id = ?;", (client_id))
         self.conn.commit()
 
     
