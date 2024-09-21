@@ -492,6 +492,12 @@ def delete_appointment_table(id):
     DB.client_manager.delete_appointment_from_table(id)
     return success_response({"appointment": appointment})
 
+@app.route("/UserLocations")
+def AllActiveUsers():
+    Data = DB.worker_manager.active_worker_locations()
+    if not Data:
+        return []
+    return Data
 if __name__ == "__main__":
     with app.app_context():
         db = get_db()
@@ -504,4 +510,4 @@ if __name__ == "__main__":
         )
         ''')
         db.commit()
-    app.run(host="0.0.0.0", port=8000, debug=True)
+app.run(host="0.0.0.0", port=8000, debug=True)
