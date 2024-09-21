@@ -31,7 +31,7 @@ function Main() {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Main /> 
       </BrowserRouter>

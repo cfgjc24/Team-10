@@ -1,21 +1,25 @@
 import { Card, CardBody, Image, Stack, Heading, 
-    Text, Divider, CardFooter, Button,  
-    useToast, useDisclosure} from "@chakra-ui/react";
+    Text, Divider, CardFooter, Button, 
+    useColorModeValue, 
+    useToast} from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalHeader,
     ModalContent, ModalCloseButton,
     ModalBody, FormControl, FormLabel,
-    Input, ModalFooter, Select
+    Input, ModalFooter
  } from '@chakra-ui/react';
-import React from "react";
+ import { useDisclosure } from "@chakra-ui/react";
 
-const AdminViewCard = ({ Employee }) => {
+const EmployeeCard = ({ Employee }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
 
+    const bg = useColorModeValue("white", "gray.800");
+
     const toast = useToast();
+
 
     // const handleEditEmployee = async (EmployeeId, updatedEmployee) => {
     //     const {success, message} = await editEmployee(EmployeeId, updatedEmployee);
@@ -59,7 +63,7 @@ const AdminViewCard = ({ Employee }) => {
     // };
 
   return (
-    <Card maxW='sm'>
+    <Card maxW='sm' bg={bg}>
         <CardBody>
             <Stack mt='6' spacing='3'>
                 <Heading size='md'>Employee Name</Heading>
@@ -86,17 +90,12 @@ const AdminViewCard = ({ Employee }) => {
                 <ModalBody pb={6}>
                     <FormControl>
                         <FormLabel>Name</FormLabel>
-                        <Input placeholder='Name'/>
                         {/* <Input ref={initialRef} placeholder='Name' value={updateEmployee.name} 
                         onChange={(e) => setUpdateEmployee({ ...updateEmployee, name: e.target.value })}/> */}
                     </FormControl>
 
                     <FormControl mt={4}>
                         <FormLabel>Current Employment Status</FormLabel>
-                        <Select placeholder='Select option'>
-                            <option value='Manager'>Manager</option>
-                            <option value='Employee'>Employee</option>
-                        </Select>
                         {/* <Input placeholder='Price' value={updateEmployee.price}
                         onChange={(e) => setUpdateEmployee({ ...updateEmployee, price: e.target.value })}/> */}
                     </FormControl>
@@ -121,4 +120,4 @@ const AdminViewCard = ({ Employee }) => {
   )
 };
 
-export default AdminViewCard;
+export default EmployeeCard;
