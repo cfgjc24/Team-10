@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Lock, Mail } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://localhost:8000';
 
 const App = () => {
   const [formData, setFormData] = useState({
