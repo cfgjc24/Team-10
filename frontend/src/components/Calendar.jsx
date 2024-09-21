@@ -19,18 +19,18 @@ const AppointmentCalendar = () => {
       },
       {
         title: 'Client Session',
-        start: new Date(2024, 8, 25, 14, 0), // Sept 25, 2024, 2:00 PM
-        end: new Date(2024, 8, 25, 15, 0),   // Sept 25, 2024, 3:00 PM
+        start: new Date(2024, 8, 25, 14, 0), 
+        end: new Date(2024, 8, 25, 15, 0),  
       },
       {
         title: 'Meeting',
-        start: new Date(2024, 8, 27, 9, 0),  // Sept 27, 2024, 9:00 AM
-        end: new Date(2024, 8, 27, 10, 0),   // Sept 27, 2024, 10:00 AM
+        start: new Date(2024, 8, 27, 9, 0),  
+        end: new Date(2024, 8, 27, 10, 0),
       },
       {
         title: 'New date',
-        start: new Date(2024, 8, 28, 13, 0), // Sept 28, 2024, 1:00 PM
-        end: new Date(2024, 8, 28, 14, 0),   // Sept 28, 2024, 2:00 PM
+        start: new Date(2024, 8, 28, 13, 0),
+        end: new Date(2024, 8, 28, 14, 0),  
       },
     ];
 
