@@ -69,12 +69,17 @@ def create_worker():
     body = json.loads(request.data)
     name = body.get("name", None)
     manager = body.get("manager", None)
+    latitude = body.get("latitude", None)
+    longitude = body.get("longitude", None)
+    point = None
 
+    if latitude and longitude:
+        point = (longitude, latitude)
     if not name or not manager:
         error = "Boss of worker or Name of worker is missing"
         return failure_response(error)
 
-    id = DB.worker_manager.insert_worker_table(name, manager)
+    id = DB.worker_manager.insert_worker_table(name, manager, point)
 
     return success_response({"id": id})
 
@@ -159,6 +164,9 @@ def update_worker_check_in(id):
     user = DB.worker_manager.get_worker_by_id(id)
 
     return success_response({"worker": user})
+
+
+
 
 
 
@@ -258,7 +266,7 @@ def delete_admin_table(id):
     if not user:
         error = "User not found"
         return failure_response(error)
-    DB.client_manager.delete_admin_from_table(id)
+    DB.admin_manager.delete_admin_from_table(id)
     return success_response({"admin": user})
 
 
@@ -272,12 +280,114 @@ def get_all_admins():
 
 
 
+# Location endpoints
+@app.route("/location", methods=["POST"])
+def create_location():
+    """
+    Endpoint for creating location
+    """
+    body = json.loads(request.data)
+    latitude = body.get("latitude", None)
+    longitude = body.get("longitude", None)
+    location_type = body.get("location_type", None)
+
+    if not longitude or not latitude or not location_type:
+        error = "Location or location type missing"
+        return failure_response(error)
+
+    location = (longitude, latitude)
+    id = DB.location_manager.insert_location(location, location_type)
+    return success_response({"id": id})
+
+@app.route("/locations")
+def get_all_locations():
+    """
+    Endpoint for getting all locations
+    """
+    locations = DB.location_manager.get_all_locations()
+    return success_response({"locations": locations})
+
+@app.route("/location/{id}")
+def get_location(id):
+    """
+    Endpoint for getting a location by id
+    """
+    location = DB.location_manager.get_location_by_id(id)
+    if not location:
+        error = "location not found"
+        return failure_response(error)
+    return success_response({"location": location})\
+    
+
+@app.route("/location/{id}", methods=["DELETE"])
+def delete_location_table(id):
+    """
+    Endpoint for deleting location by id
+    """
+    location = DB.location_manager.get_location_by_id(id)
+    if not location:
+        error = "location not found"
+        return failure_response(error)
+    DB.location_manager.delete_location(id)
+    return success_response({"location": location})
 
 
 
-# 
+
+# Appointment Endpoints
+@app.route("/appointment", methods=["POST"])
+def create_appointment():
+    """
+    Endpoint for creating appointment
+    """
+    body = json.loads(request.data)
+    client = body.get("client", None)
+    worker = body.get("worker", None)
+    start = body.get("start", None)
+    end = body.get("end", None)
+    location = body.get("location", None)
+
+    if not worker or not client or not end or not start:
+        error = "Bad request"
+        return failure_response(error)
+
+    id = DB.appointment_manager.insert_appointment(location, worker, client, start, end)
+    return success_response({"id": id})
+
+
+    
+@app.route("/appointment/{id}")
+def get_appointment(id):
+    """
+    Endpoint for getting a appointment by id
+    """
+    appointment = DB.appointment_manager.get_appointment_by_id(id)
+    if not appointment:
+        error = "appointment not found"
+        return failure_response(error)
+    return success_response({"appointment": appointment})
+
+@app.route("/appointment")
+def get_all_appointment():
+    """
+    Endpoint for getting all appointment
+    """
+    appointments = DB.appointment_manager.get_all_aappointment()
+    return success_response({"appointments": appointments})
+
+@app.route("/appointment/{id}", methods=["DELETE"])
+def delete_appointment_table(id):
+    """
+    Endpoint for deleting appointment by id
+    """
+    appointment = DB.appointment_manager.get_appointment_by_id(id)
+    if not appointment:
+        error = "appointment not found"
+        return failure_response(error)
+    DB.client_manager.delete_appointment_from_table(id)
+    return success_response({"appointment": appointment})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
-
 
