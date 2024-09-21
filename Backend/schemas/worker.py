@@ -13,12 +13,13 @@ class WorkerManager:
                                 name TEXT NOT NULL,
                                 manager INTEGER NOT NULL,
                                 status TEXT CHECK(status IN ('away', 'approaching', 'arrived')) NOT NULL, 
-                                last_update TIME NOT NULL,
-                                check_in TIME NULL,
-                                check_out TIME NULL,
-                                FOREIGN KEY(manager) REFERENCES managers[id]
+                                last_update TIMESTAMP NOT NULL,
+                                check_in TIMESTAMP NULL,
+                                check_out TIMESTAMP NULL,
+                                FOREIGN KEY(manager) REFERENCES managers(id)
                             );""")
         self.conn.commit()
+
 
     def delete_worker_table(self):
         """
