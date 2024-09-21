@@ -5,6 +5,7 @@ import CheckInButtons from '../components/CheckInButtons.jsx'
 import Navbar from '../components/Navbar.jsx';
 import IdCard from '../components/IdCard.jsx';
 import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
+import Employee
 
 
 function EmployeePage() {
@@ -26,6 +27,7 @@ function EmployeePage() {
                     <Heading>Current Patients</Heading>
                     <IdCard></IdCard>
                 </div>
+                <div></div>
                 <div className="col right-side">
                     <CheckInButtons></CheckInButtons>
                 </div>
