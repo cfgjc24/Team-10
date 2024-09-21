@@ -66,7 +66,7 @@ class WorkerManager:
         """
         Deletes a workers from the workers table using SQL
         """
-        self.conn.execute("DELETE FROM workers WHERE id = ?;", (worker_id))
+        self.conn.execute("DELETE FROM workers WHERE id = ?;", (worker_id,))
         self.conn.commit()
 
     def update_worker_updated_time(self, worker_id):

@@ -21,7 +21,7 @@ class ClientManager:
         self.conn.execute("""DROP TABLE IF EXISTS clients""")
         self.conn.commit()
 
-    def get_all_client(self):
+    def get_all_clients(self):
         """
         Returns all clients in the table using SQL
         """
@@ -35,10 +35,16 @@ class ClientManager:
         """
         Returns a client by its ID
         """
-        cursor = self.conn.execute("SELECT * FROM client WHERE id = ?;", (client_id))
+        cursor = self.conn.execute("SELECT * FROM clients WHERE id = ?;", (client_id,))
         for row in cursor:
-            return ({"id": row[0], "name": row[1], "description": row[2], "over_eighteen": row[3]})
+            return {
+                "id": row[0],
+                "name": row[1],
+                "description": row[2],
+                "over_eighteen": row[3]
+            }
         return None
+
 
     def insert_client_table(self, name, over_eighteen, description=None):
         """
@@ -56,7 +62,7 @@ class ClientManager:
         """
         Deletes a worker from the worker table using SQL
         """
-        self.conn.execute("DELETE FROM clients WHERE id = ?;", (client_id))
+        self.conn.execute("DELETE FROM clients WHERE id = ?;", (client_id,))
         self.conn.commit()
 
     
