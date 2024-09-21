@@ -34,6 +34,22 @@ app.config['DATABASE'] = 'mydatabase.db'
 
 DB = db.DatabaseDriver()
 
+
+@app.before_request
+def handle_cors():
+    if request.method == 'OPTIONS':
+        response = app.make_response('')
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return response
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    return response
 # Database functions
 def get_db_connection():
     conn = None
