@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Lock, Mail } from 'lucide-react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://localhost:8000';  // Make sure this matches your Flask backend URL
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +25,8 @@ const App = () => {
       setMessage(response.data.message);
       console.log('Login successful:', response.data);
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Login failed. Please check your email and password.');
+      setMessage(error.response?.data?.error || 'Login failed. Please check your email and password.');
+      console.error('Login error:', error.response?.data);
     }
   };
 

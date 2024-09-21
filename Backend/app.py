@@ -138,25 +138,45 @@ def register():
         logger.warning(f"Form validation failed: {form.errors}")
         return jsonify({"errors": form.errors}), 400
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'OPTIONS'])
 def login():
-    form = LoginForm(request.form)
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
+    if request.method == 'OPTIONS':
+        return '', 204
+    
+    logger.info(f"Received login request: {request.data}")
+    try:
+        data = request.get_json()
+        logger.info(f"Parsed JSON data: {data}")
+    except Exception as e:
+        logger.error(f"Error parsing JSON: {e}")
+        return jsonify({"error": "Invalid JSON"}), 400
 
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE email=?", (email,))
-        user = cur.fetchone()
-        conn.close()
+    email = data.get('email')
+    password = data.get('password')
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
-            session['user_id'] = user['id']
-            return jsonify({"message": "Logged in successfully"}), 200
-        else:
-            return jsonify({"error": "Invalid email or password"}), 401
-    return jsonify({"errors": form.errors}), 400
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
+    conn = get_db_connection()
+    if conn:
+        try:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM users WHERE email=?", (email,))
+            user = cur.fetchone()
+            
+            if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+                logger.info(f"User logged in successfully: {email}")
+                return jsonify({"message": "Login successful"}), 200
+            else:
+                logger.warning(f"Failed login attempt for email: {email}")
+                return jsonify({"error": "Invalid email or password"}), 401
+        except Exception as e:
+            logger.error(f"Database error during login: {e}")
+            return jsonify({"error": "An error occurred during login"}), 500
+        finally:
+            conn.close()
+    else:
+        return jsonify({"error": "Database connection error"}), 500
 
 @app.route('/dashboard')
 def dashboard():
