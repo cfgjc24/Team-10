@@ -20,7 +20,7 @@ class WorkerManager:
                                 FOREIGN KEY(manager) REFERENCES managers(id)
                             );""")
         self.conn.commit()
-
+#comment
 
     def delete_worker_table(self):
         """
