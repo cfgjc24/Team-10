@@ -218,6 +218,63 @@ def get_client(id):
 
 
 
+
+# Admin Endpoints
+@app.route("/admin", methods=["POST"])
+def create_admin():
+    """
+    Endpoint for creating admin
+    """
+    body = json.loads(request.data)
+    name = body.get("name", None)
+
+    if not name:
+        error = "Name of admin is missing"
+        return failure_response(error)
+
+    id = DB.admin_manager.insert_admin_table(name)
+    return success_response({"id": id})
+
+
+@app.route("/admin/{id}")
+def get_admin(id):
+    """
+    Endpoint for getting a admin by id
+    """
+    admin = DB.admin_manager.get_admin_by_id(id)
+    if not admin:
+        error = "User not found"
+        return failure_response(error)
+    return success_response({"admin": admin})
+
+
+
+@app.route("/admin/{id}", methods=["DELETE"])
+def delete_admin_table(id):
+    """
+    Endpoint for deleting admin by id
+    """
+    user = DB.admin_manager.get_admin_by_id(id)
+    if not user:
+        error = "User not found"
+        return failure_response(error)
+    DB.client_manager.delete_admin_from_table(id)
+    return success_response({"admin": user})
+
+
+@app.route("/admins")
+def get_all_admins():
+    """
+    Endpoint for getting all admins
+    """
+    admins = DB.admin_manager.get_all_admins()
+    return success_response({"admin": admins})
+
+
+
+
+
+
 # 
 
 if __name__ == "__main__":
