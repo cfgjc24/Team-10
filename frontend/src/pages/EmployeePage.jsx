@@ -12,7 +12,6 @@ function EmployeePage() {
     const [openCaseCount, setOpenCaseCount] = useState(100); // example value
     return(
         <div>
-            <Navbar></Navbar>
             <div id="banner">
                 <div className="alert alert-light" role="alert"> 
                     Our impact: {openCaseCount} open cases!
