@@ -498,6 +498,8 @@ def AllActiveUsers():
     if not Data:
         return []
     return Data
+
+
 if __name__ == "__main__":
     with app.app_context():
         db = get_db()

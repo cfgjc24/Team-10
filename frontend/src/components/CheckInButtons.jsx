@@ -15,7 +15,7 @@ function CheckInButtons({ onClockIn, onClockOut, isClockIn }) {
           const response = await axios.post('http://localhost:8000/clock-in', {
             latitude,
             longitude,
-            user_id: 1 // Replace with actual user ID from your authentication system
+            user_id: 1
           });
           console.log('Clock in successful:', response.data);
           onClockIn({ id: response.data.id, latitude, longitude });
