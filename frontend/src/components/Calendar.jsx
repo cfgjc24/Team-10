@@ -10,27 +10,31 @@ const AppointmentCalendar = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    // appointments from flask backend
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch('/api/appointments');
-        if (!response.ok) {
-          throw new Error('Failed to fetch appointments');
-        }
-        const data = await response.json();
-        // the backend returns an array of appointment objects
-        // with 'title', 'start', and 'end' properties
-        setAppointments(data.map(apt => ({
-          ...apt,
-          start: new Date(apt.start),
-          end: new Date(apt.end)
-        })));
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      }
-    };
+    // fake data
+    const sampleAppointments = [
+      {
+        title: 'Meeting',
+        start: new Date(2024, 8, 24, 10, 0), 
+        end: new Date(2024, 8, 24, 11, 0),  
+      },
+      {
+        title: 'Client Session',
+        start: new Date(2024, 8, 25, 14, 0), // Sept 25, 2024, 2:00 PM
+        end: new Date(2024, 8, 25, 15, 0),   // Sept 25, 2024, 3:00 PM
+      },
+      {
+        title: 'Meeting',
+        start: new Date(2024, 8, 27, 9, 0),  // Sept 27, 2024, 9:00 AM
+        end: new Date(2024, 8, 27, 10, 0),   // Sept 27, 2024, 10:00 AM
+      },
+      {
+        title: 'New date',
+        start: new Date(2024, 8, 28, 13, 0), // Sept 28, 2024, 1:00 PM
+        end: new Date(2024, 8, 28, 14, 0),   // Sept 28, 2024, 2:00 PM
+      },
+    ];
 
-    fetchAppointments();
+    setAppointments(sampleAppointments);
   }, []);
 
   const eventStyleGetter = (event, start, end, isSelected) => {
