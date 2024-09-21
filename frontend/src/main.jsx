@@ -7,6 +7,7 @@ import ManagerPage from './pages/ManagerPage.jsx'
 import EmployeePage from './pages/EmployeePage.jsx'
 import { ChakraProvider } from '@chakra-ui/react';
 import Navbar from './components/Navbar.jsx'
+import SubmitForm from './pages/SubmitForm.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -18,6 +19,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/manager" element={<ManagerPage />} />
           <Route path="/employee" element={<EmployeePage />} />
+          <Route path="/submitform" element={<SubmitForm />} />
+
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
