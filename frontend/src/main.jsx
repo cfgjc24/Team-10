@@ -9,6 +9,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Navbar from './components/Navbar.jsx';
 import SubmitForm from './pages/SubmitForm.jsx';
 import Chatbot from './components/Chatbot.jsx';
+import SubmitReimbursementForm from './pages/SubmitReimbursementForm.jsx';
 
 function Main() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function Main() {
         <Route path="/manager" element={<ManagerPage />} />
         <Route path="/employee" element={<EmployeePage />} />
         <Route path="/submitform" element={<SubmitForm />} />
+        <Route path="/reimbursement" element={<SubmitReimbursementForm />} />
       </Routes>
     </>
   );
@@ -31,7 +33,7 @@ function Main() {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider>
       <BrowserRouter>
         <Main /> 
       </BrowserRouter>

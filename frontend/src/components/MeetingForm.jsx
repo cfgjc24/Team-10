@@ -8,7 +8,7 @@ const validationSchema = Yup.object({
   summary: Yup.string().required('Summary is required'),
 });
 
-const Form = () => {
+const MeetingForm = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -67,12 +67,18 @@ const Form = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.summary}
-          className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+          className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
           placeholder="Enter a summary of your day"
         />
         {formik.touched.summary && formik.errors.summary ? (
           <div className="text-xs italic text-red-500">{formik.errors.summary}</div>
         ) : null}
+      </div>
+
+      <div className='mb-2'>
+        <a href="/reimbursement" className="text-blue-500 underline hover:text-blue-700 ">
+          Need Reimbursement?
+        </a>
       </div>
 
       <div className="flex items-center justify-between">
@@ -82,9 +88,10 @@ const Form = () => {
         >
           Submit
         </button>
+
       </div>
     </form>
   );
 };
 
-export default Form;
+export default MeetingForm;
