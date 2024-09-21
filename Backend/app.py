@@ -492,7 +492,7 @@ def delete_appointment_table(id):
     DB.client_manager.delete_appointment_from_table(id)
     return success_response({"appointment": appointment})
 
-@app.route("/UserLocations")
+@app.route("/UserLocations/all")
 def AllActiveUsers():
     Data = DB.worker_manager.active_worker_locations()
     if not Data:
