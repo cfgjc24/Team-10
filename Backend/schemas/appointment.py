@@ -63,13 +63,17 @@ class AppointmentManager:
         """
         Inserts a new appointment into the appointments table with provided values.
         """
+        # Convert location tuple to string format (e.g., "40.7128,-74.0060")
+        location_str = f"{location[0]},{location[1]}"
+        
         cursor = self.conn.execute("""
             INSERT INTO appointments (location, worker_id, client_id, expected_start, expected_end)
             VALUES (?, ?, ?, ?, ?);
-        """, (location, worker_id, client_id, expected_start, expected_end))
+        """, (location_str, worker_id, client_id, expected_start, expected_end))
         
         self.conn.commit()
         return cursor.lastrowid
+
 
     def delete_appointment(self, appointment_id):
         """

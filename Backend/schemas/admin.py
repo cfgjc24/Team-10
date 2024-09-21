@@ -38,23 +38,23 @@ class AdminManager:
             return ({"id": row[0], "name": row[1]})
         return None
 
-    def insert_client_table(self, name):
+    def insert_admin_table(self, name):
         """
         Inserts a new admin into the clients table with default values.
         """
         cursor = self.conn.execute("""
             INSERT INTO admins (name)
             VALUES (?);
-        """, (name))
+        """, (name,))
         
         self.conn.commit()
         return cursor.lastrowid
 
-    def delete_client_from_table(self, admin_id):
+    def delete_admin_from_table(self, admin_id):
         """
         Deletes a admin from the worker table using SQL
         """
-        self.conn.execute("DELETE FROM admins WHERE id = ?;", (admin_id))
+        self.conn.execute("DELETE FROM admins WHERE id = ?;", (admin_id,))
         self.conn.commit()
 
     
