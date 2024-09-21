@@ -5,7 +5,7 @@ import CheckInButtons from '../components/CheckInButtons.jsx'
 import WorkerMap from '../components/WorkerMap.jsx';
 import { Card, CardBody, Heading } from '@chakra-ui/react'
 import Calendar from '../components/Calendar.jsx';
-import IdCard from '../components/IdCard.jsx';
+import PatientIdCard from '../components/PatientIdCard.jsx';
 
 function EmployeePage() {
   const [openCaseCount, setOpenCaseCount] = useState(100);
@@ -34,7 +34,14 @@ function EmployeePage() {
       <div id="page-container">
         <div className="col left-side">
           <Heading>Current Patients</Heading>
-          <IdCard />
+          <br></br>
+          <PatientIdCard name="Alice Johnson"/>
+          <br></br>
+          <PatientIdCard name="Michael Smith"/>
+          <br></br>
+          <PatientIdCard name="Emily Davis"/>
+          <br></br>
+          <PatientIdCard name="Robert Juarez"/>
         </div>
         <div className="col middle-side">
           <Calendar className="calendar-shadow" />
