@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export default function EmployeeMap() {
+export default function WorkerMap() {
 
   const [map, setMap] = useState(null);
 
@@ -50,8 +50,8 @@ export default function EmployeeMap() {
 
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">Map</h1>
-      <div className="" id="map" style={{ height: '500px', width: '90%' }}></div>
+      <h1 className="text-2xl font-bold mb-4">Map</h1>
+      <div id="map" style={{ height: '500px', width: '100%' }}></div>
           </div>
   );
 }
