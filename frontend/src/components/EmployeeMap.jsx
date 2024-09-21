@@ -50,8 +50,8 @@ export default function EmployeeMap() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Map</h1>
-      <div id="map" style={{ height: '500px', width: '100%' }}></div>
+      <h1 className="mb-4 text-2xl font-bold">Map</h1>
+      <div className="" id="map" style={{ height: '500px', width: '90%' }}></div>
           </div>
   );
 }

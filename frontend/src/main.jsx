@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
     <ChakraProvider>
       <BrowserRouter>
         <Navbar/>
-        <Chatbot/>
+        <Chatbot className="chatbot-container" />
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin" element={<AdminPage />} />
