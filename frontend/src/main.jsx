@@ -5,14 +5,19 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import AdminPage from './pages/AdminPage.jsx'
 import ManagerPage from './pages/ManagerPage.jsx'
 import EmployeePage from './pages/EmployeePage.jsx'
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import Navbar from './components/Navbar.jsx'
 import SubmitForm from './pages/SubmitForm.jsx'
 import Chatbot from './components/Chatbot.jsx'
 
+const theme = extendTheme({
+  initialColorMode: "light",
+  useSystemColorMode: false,
+});
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Navbar/>
         <Chatbot className="chatbot-container" />
