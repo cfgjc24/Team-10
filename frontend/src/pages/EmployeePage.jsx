@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "../index.css";
-import CheckInButtons from '../components/CheckInButtons.jsx'
+import { 
+  Box, 
+  Container, 
+  Grid, 
+  GridItem, 
+  Heading, 
+  VStack, 
+  Flex,
+  useColorModeValue
+} from '@chakra-ui/react';
+import CheckInButtons from '../components/CheckInButtons';
 import EmployeeMap from '../components/EmployeeMap';
-import { Card, CardBody, Heading, Box } from '@chakra-ui/react'
-import Calendar from '../components/Calendar.jsx';
-import IdCard from '../components/IdCard.jsx';
+import Calendar from '../components/Calendar';
+import IdCard from '../components/IdCard';
 
 function EmployeePage() {
   const [openCaseCount, setOpenCaseCount] = useState(100);
@@ -35,42 +42,97 @@ function EmployeePage() {
     { _id: 10, name: "Jack Sparrow", status: "worker" },
   ];
 
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const cardBgColor = useColorModeValue('white', 'gray.700');
+
   return (
-    <div>
-      <div id="banner">
-        <Card>
-          <CardBody>
-            <Heading className="text-center custom-font">Our impact: {openCaseCount} open cases!</Heading>
-          </CardBody>
-        </Card>
-      </div>
-      <div id="page-container">
-        <div className="col left-side">
-        <Box padding={'20px'}>
-          <Heading>Current Patients</Heading>
-          {clients.map((employee) => (
-            <Box key={employee._id} marginBottom={'20px'}>
-              <IdCard Employee={employee} />
-            </Box>
-          ))}
+    <Box bg={bgColor} minHeight="100vh">
+      <Container maxW="container.xl" py={8}>
+        <Box 
+          bg={cardBgColor} 
+          p={4} 
+          borderRadius="lg" 
+          boxShadow="md" 
+          mb={8}
+        >
+          <Heading textAlign="center" size="xl" fontWeight="extrabold">
+            Our impact: {openCaseCount} open cases!
+          </Heading>
         </Box>
-        </div>
-        <div className="col middle-side">
-          <Calendar className="calendar-shadow" />
-        </div>
-        <div className="col right-side">
-          <CheckInButtons 
-            onClockIn={handleClockIn} 
-            onClockOut={handleClockOut} 
-            isClockIn={isClockIn} 
-          />
-          <EmployeeMap 
-            newLocation={employeeLocation} 
-            isClockIn={isClockIn} 
-          />
-        </div>
-      </div>
-    </div>
+
+        <Grid templateColumns="repeat(3, 1fr)" gap={8}>
+          <GridItem colSpan={1}>
+            <VStack spacing={4} align="stretch">
+              <Heading size="lg" mb={2}>Current Patients</Heading>
+              <Box 
+                maxHeight="calc(100vh - 250px)" 
+                overflowY="auto" 
+                pr={2}
+                css={{
+                  '&::-webkit-scrollbar': {
+                    width: '4px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    width: '6px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: 'gray.300',
+                    borderRadius: '24px',
+                  },
+                }}
+              >
+                {clients.map((employee) => (
+                  <Box key={employee._id} mb={4}>
+                    <IdCard Employee={employee} />
+                  </Box>
+                ))}
+              </Box>
+            </VStack>
+          </GridItem>
+
+          <GridItem colSpan={1}>
+            <Box 
+              bg={cardBgColor} 
+              p={4} 
+              borderRadius="lg" 
+              boxShadow="md"
+            >
+              <Calendar />
+            </Box>
+          </GridItem>
+
+          <GridItem colSpan={1}>
+            <VStack spacing={8}>
+              <Box 
+                w="100%" 
+                bg={cardBgColor} 
+                p={4} 
+                borderRadius="lg" 
+                boxShadow="md"
+              >
+                <CheckInButtons
+                  onClockIn={handleClockIn}
+                  onClockOut={handleClockOut}
+                  isClockIn={isClockIn}
+                />
+              </Box>
+              <Box 
+                w="100%" 
+                bg={cardBgColor} 
+                p={4} 
+                borderRadius="lg" 
+                boxShadow="md"
+              >
+                <EmployeeMap
+                  newLocation={employeeLocation}
+                  isClockIn={isClockIn}
+                />
+              </Box>
+            </VStack>
+          </GridItem>
+        </Grid>
+      </Container>
+    </Box>
   );
 }
 
