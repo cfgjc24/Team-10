@@ -1,7 +1,8 @@
 import React, { act } from 'react';
 import EmployeeMap from '../components/EmployeeMap';
 import IdCard from '../components/IdCard';
-import { Heading, VStack } from '@chakra-ui/react'
+import { Box, Heading, VStack } from '@chakra-ui/react'
+import Navbar from '../components/Navbar';
 
 const ManagerPage = () => {
 
@@ -25,8 +26,9 @@ const ManagerPage = () => {
     // const inactiveEmployees = getInactiveEmployees();
 
   return (
+    <Box>
     <div id="page-container">
-        <div class="manager-left-side">
+        <div className="manager-left-side">
             <VStack>
                 <Heading>
                     Active
@@ -34,7 +36,6 @@ const ManagerPage = () => {
                 {/* {activeEmployees.map((activeEmployee) => ( */}
                     <IdCard />
                 {/* ))} */}
-
 
                 <Heading>
                     Inactive
@@ -45,10 +46,11 @@ const ManagerPage = () => {
                 {/* ))} */}
             </VStack>
         </div>
-        <div class="manager-right-side">
+        <div className="manager-right-side">
             <EmployeeMap></EmployeeMap>
         </div>
     </div>
+    </Box>
   )
 }
 
