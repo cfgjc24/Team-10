@@ -1,55 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
 
-export default function SimpleMap() {
-
-  const API_URL = 'https://localhost:8000'
-
-  const locations = [
-  { latitude: 40.7128, longitude: -74.0060, label: "New York" }
-];
-
-  const fetchLocations = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/UserLocations/all`);
-      console.log('Fetched locations:', response.data);
-    } catch (error) {
-      console.error('Error fetching locations:', error);
-    }
-  };
+export default function WorkerMap({ workerLocation }) {
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
-    fetchLocations();
-
-    const map = L.map('map').setView([40.7128, -74.0060], 10); // 
-
+    const newMap = L.map('map').setView([40.7128, -74.0060], 10);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
-    }).addTo(map);
-
-        locations.forEach(location => {
-      const marker = L.marker([location.latitude, location.longitude])
-        .addTo(map)
-        .bindPopup(`<b>${location.label}</b>`);
-    });
+    }).addTo(newMap);
+    setMap(newMap);
 
     return () => {
-      map.remove();
+      newMap.remove();
     };
   }, []);
 
+  useEffect(() => {
+    if (map && workerLocation) {
+      // Clear existing markers
+      map.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          map.removeLayer(layer);
+        }
+      });
+
+      L.marker([workerLocation.latitude, workerLocation.longitude])
+        .addTo(map)
+        .bindPopup("Your current location")
+        .openPopup();
+
+      map.setView([workerLocation.latitude, workerLocation.longitude], 13);
+    }
+  }, [map, workerLocation]);
+
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-bold">Map</h1>
-      <div id="map" style={{ height: '500px', width: '100%' }}></div>
-      <button
-        onClick={fetchLocations}
-        className="p-2 mt-4 text-white bg-blue-500 rounded"
-      >
-        Fetch and Log Locations
-      </button>
+      <h1 className="mb-4 text-2xl font-bold">Worker Map</h1>
+      <div id="map" style={{ height: '500px', width: '100%', marginBottom: '1rem' }}></div>
     </div>
   );
 }

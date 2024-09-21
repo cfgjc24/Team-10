@@ -248,30 +248,6 @@ def update_worker_status(id):
     return success_response({"worker": user})
 
 
-@app.route("/clock-in", methods=["POST"])
-def clock_in():
-    body = request.json
-    latitude = body.get("latitude")
-    longitude = body.get("longitude")
-    user_id = body.get("user_id")  # You might want to get this from the session instead
-
-    if not latitude or not longitude or not user_id:
-        return jsonify({"error": "Missing required data"}), 400
-
-    try:
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO clock_ins (user_id, latitude, longitude, timestamp)
-            VALUES (?, ?, ?, ?)
-        """, (user_id, latitude, longitude, datetime.now()))
-        conn.commit()
-        id = cursor.lastrowid
-        return jsonify({"id": id, "message": "Clock-in recorded successfully"}), 201
-    except Exception as e:
-        logger.error(f"Error recording clock-in: {e}")
-        return jsonify({"error": "Error recording clock-in"}), 500
-
 
 
 @app.route("/worker/check_in/<int:id>", methods=["POST"])
