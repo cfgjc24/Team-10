@@ -23,7 +23,7 @@ const Chatbot = () => {
         method: "post",
         data: {
           contents: [{
-            parts: [{text: input}]
+            parts: [{text: "you are a proffesional mental health person respond to this input with the best course of actions based of these: " + input + " respond in 3-4 sentences"}]
           }]
         }
       });
@@ -34,7 +34,6 @@ const Chatbot = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error("Error sending message:", error);
-      // Optionally, add an error message to the chat
       setMessages((prevMessages) => [...prevMessages, { role: 'bot', content: "Sorry, I encountered an error. Please try again." }]);
     }
   };
