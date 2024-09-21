@@ -56,9 +56,10 @@
 
 /*navbar*/
 .header {
-    margin-top: 1.5%;
+    padding: 1.5%;
     display: flex;
     justify-content: space-between;
+    /*background-color: rgba(33, 158, 188, 0.25)*/
 }
   
 .logo {
@@ -68,4 +69,9 @@
 
 #form {
     margin: 5vw 0;
+}
+
+.custom-font { 
+    font-size: 1rem; 
+    font-style: italic;
 }

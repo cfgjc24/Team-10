@@ -4,8 +4,7 @@ import "../index.css";
 import CheckInButtons from '../components/CheckInButtons.jsx'
 import Navbar from '../components/Navbar.jsx';
 import IdCard from '../components/IdCard.jsx';
-import {Heading} from '@chakra-ui/react'
-
+import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
 
 
 function EmployeePage() {
@@ -13,9 +12,14 @@ function EmployeePage() {
     return(
         <div>
             <div id="banner">
-                <div className="alert alert-light" role="alert"> 
-                    Our impact: {openCaseCount} open cases!
-                </div>
+                {/* <div className="alert alert-light text-center custom-font" role="alert"> 
+                    he
+                </div> */}
+                <Card>
+                    <CardBody>
+                        <Heading className="text-center custom-font">Our impact: {openCaseCount} open cases!</Heading>
+                    </CardBody> 
+                </Card>
             </div>
             <div id="page-container">
                 <div className="col left-side">
