@@ -1,24 +1,38 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 export default function EmployeeMap() {
   const mapRef = useRef(null);
+  const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (!mapRef.current) {
-      const newMap = L.map('map').setView([40.7128, -74.0060], 10);
+    // Get user's current location
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current && userLocation) {
+      const newMap = L.map('map').setView([userLocation.latitude, userLocation.longitude], 13);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
       }).addTo(newMap);
 
       mapRef.current = newMap;
-
-      const employeeLocations = [
-        [40.6084, -73.9574],
-        [40.7128, -74.0060],
-        [34.0522, -118.2437],
-      ];
 
       const customIcon = L.icon({
         iconUrl: '/img/marker.png',
@@ -27,11 +41,9 @@ export default function EmployeeMap() {
         popupAnchor: [0, -32]
       });
 
-      employeeLocations.forEach((location) => {
-        L.marker(location, { icon: customIcon })
-          .addTo(newMap)
-          .bindPopup("Employee Data");
-      });
+      L.marker([userLocation.latitude, userLocation.longitude], { icon: customIcon })
+        .addTo(newMap)
+        .bindPopup("Your Location");
     }
 
     return () => {
@@ -40,7 +52,7 @@ export default function EmployeeMap() {
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [userLocation]);
 
   return (
     <div>

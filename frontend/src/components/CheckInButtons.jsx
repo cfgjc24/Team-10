@@ -12,10 +12,10 @@ function CheckInButtons({ onClockIn, onClockOut, isClockIn }) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
         try {
-          const response = await axios.post('http://localhost:8000/location', {
+          const response = await axios.post('http://localhost:8000/clock-in', {
             latitude,
             longitude,
-            location_type: 'clock_in'
+            user_id: 1 // Replace with actual user ID from your authentication system
           });
           console.log('Clock in successful:', response.data);
           onClockIn({ id: response.data.id, latitude, longitude });
@@ -30,9 +30,13 @@ function CheckInButtons({ onClockIn, onClockOut, isClockIn }) {
     }
   };
 
-  const handleClockOut = () => {
-    onClockOut();
-    navigate("/submitform");
+  const handleClockOut = async () => {
+    try {
+      onClockOut();
+      navigate("/submitform");
+    } catch (error) {
+      console.error('Error clocking out:', error);
+    }
   };
 
   return (
