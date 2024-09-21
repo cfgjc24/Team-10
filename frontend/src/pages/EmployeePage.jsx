@@ -2,13 +2,8 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../index.css";
 import CheckInButtons from '../components/CheckInButtons.jsx'
-<<<<<<< HEAD
 import EmployeeMap from '../components/EmployeeMap';
-import { Card, CardBody, Heading } from '@chakra-ui/react'
-=======
-import WorkerMap from '../components/WorkerMap.jsx';
 import { Card, CardBody, Heading, Box } from '@chakra-ui/react'
->>>>>>> 0b7a306 (displayed data in Manager, Admin, and Employee views)
 import Calendar from '../components/Calendar.jsx';
 import IdCard from '../components/IdCard.jsx';
 

@@ -11,14 +11,12 @@ const AdminViewCard = ({ Employee }) => {
   const [status, setErrors] = useState({});
 
   const handleEditEmployee = async (EmployeeId, updatedEmployee) => {
-<<<<<<< HEAD
-=======
-    // Implementation of edit logic...
+    // implement
     onClose();
->>>>>>> 0b7a306 (displayed data in Manager, Admin, and Employee views)
   };
 
   const handleDeleteEmployee = async (EmployeeId) => {
+    // implement
   };
 
   return (
@@ -27,11 +25,7 @@ const AdminViewCard = ({ Employee }) => {
         <Stack mt='6' spacing='3'>
           <Heading size='md'>{Employee.name}</Heading>
           <Text color='blue.600' fontSize='2xl'>
-<<<<<<< HEAD
             {Employee.status} {}
-=======
-            {Employee.status}
->>>>>>> 0b7a306 (displayed data in Manager, Admin, and Employee views)
           </Text>
         </Stack>
       </CardBody>
