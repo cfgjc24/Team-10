@@ -10,7 +10,7 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Signup submitted:', { name, email, password });
+    console.log('Signup submitted:', { name, email, password1 });
   };
 
   return (

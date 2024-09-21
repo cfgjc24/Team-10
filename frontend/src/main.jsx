@@ -17,9 +17,9 @@ function Main() {
   
   return (
     <>
-      <Navbar />
       {/* avoiding chatbot in the "/" */}
       {location.pathname !== '/' && <Chatbot className="chatbot-container" />}
+      {(location.pathname !== '/' && location.pathname !== '/signup') && <Navbar />}
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/admin" element={<AdminPage />} />
