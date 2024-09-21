@@ -1,12 +1,21 @@
 import { Card, CardBody, Stack, Heading, Text, Divider, CardFooter, Button, useToast, useDisclosure } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Select } from '@chakra-ui/react';
+import { useState } from "react";
 import React from "react";
 
 const AdminViewCard = ({ Employee }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const [name, setMessage] = useState('');
+  const [status, setErrors] = useState({});
+
   const handleEditEmployee = async (EmployeeId, updatedEmployee) => {
+<<<<<<< HEAD
+=======
+    // Implementation of edit logic...
+    onClose();
+>>>>>>> 0b7a306 (displayed data in Manager, Admin, and Employee views)
   };
 
   const handleDeleteEmployee = async (EmployeeId) => {
@@ -18,7 +27,11 @@ const AdminViewCard = ({ Employee }) => {
         <Stack mt='6' spacing='3'>
           <Heading size='md'>{Employee.name}</Heading>
           <Text color='blue.600' fontSize='2xl'>
+<<<<<<< HEAD
             {Employee.status} {}
+=======
+            {Employee.status}
+>>>>>>> 0b7a306 (displayed data in Manager, Admin, and Employee views)
           </Text>
         </Stack>
       </CardBody>
@@ -38,7 +51,7 @@ const AdminViewCard = ({ Employee }) => {
                 </FormControl>
                 <FormControl mt={4}>
                   <FormLabel>Current Position</FormLabel>
-                  <Select defaultValue={Employee.status}>
+                  <Select defaultValue={Employee.status} placeholder='Select option'>
                     <option value='Manager'>Manager</option>
                     <option value='Provider'>Provider</option>
                   </Select>
