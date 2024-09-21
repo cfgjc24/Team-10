@@ -6,11 +6,13 @@ import AdminPage from './pages/AdminPage.jsx'
 import ManagerPage from './pages/ManagerPage.jsx'
 import EmployeePage from './pages/EmployeePage.jsx'
 import { ChakraProvider } from '@chakra-ui/react';
+import Navbar from './components/Navbar.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ChakraProvider>
       <BrowserRouter>
+        <Navbar/>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin" element={<AdminPage />} />
