@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, flash
+from flask import Flask, render_template, redirect, url_for, session, flash , request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, ValidationError
@@ -7,6 +7,23 @@ import sqlite3
 from sqlite3 import Error
 
 app = Flask(__name__)
+
+# Options 
+@app.before_request
+def HandleCors():
+    print("cors error")
+    if request.method == "OPTIONS":
+        return "" , 200
+
+
+@app.after_request
+def apply_cors_headers(response):
+    print("got to exit cors func")
+    response.headers["Access-Control-Allow-Origin"] = "*"  # Or specify a domain
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    print(response)
+    return response
 
 # SQLite Configuration
 app.config['DATABASE'] = 'mydatabase.db'
@@ -62,7 +79,12 @@ class LoginForm(FlaskForm):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if request.method == "POST":
+        print("Hellow wolrd")
+        return 4
+    else:
+        print("get req case")
+        return 5
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
