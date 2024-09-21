@@ -53,7 +53,7 @@ const AppointmentCalendar = () => {
   };
 
   return (
-    <div className="h-screen p-4">
+    <div className="h-[50vh] p-4">
       <Calendar
         localizer={localizer}
         events={appointments}

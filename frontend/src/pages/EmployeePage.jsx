@@ -25,7 +25,7 @@ function EmployeePage() {
   return (
     <div>
       <div id="banner">
-        <Card>
+        <Card bg='#e6f2ff'>
           <CardBody>
             <Heading className="text-center custom-font">Our impact: {openCaseCount} open cases!</Heading>
           </CardBody>

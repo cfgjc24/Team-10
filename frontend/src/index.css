@@ -13,18 +13,19 @@
     width: 30%;
     height: 80vh;
     padding: 1em;
-    padding-left: 10%;
 }
 .right-side { 
     width: 30%;
     height: 80vh;
-    padding: 1em;
+    /* padding: 1em; */
+    padding-right: 2em;
 }
 
 .middle-side {
     width: 30%;
     height: 80vh;
     padding: 1em;
+    padding-right: 10%;
     /* background-color: blue; */
 }
 
@@ -53,6 +54,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 2em;
 }
 
 .btn-list-item {
