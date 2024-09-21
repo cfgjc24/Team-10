@@ -64,7 +64,7 @@ const AdminViewCard = ({ Employee }) => {
             <Stack mt='6' spacing='3'>
                 <Heading size='md'>Employee Name</Heading>
                 <Text color='blue.600' fontSize='2xl'>
-                    Current Employment Status
+                    Current Position
                 </Text>
             </Stack>
         </CardBody>
@@ -97,8 +97,8 @@ const AdminViewCard = ({ Employee }) => {
                             <option value='Manager'>Manager</option>
                             <option value='Provider'>Provider</option>
                         </Select>
-                        {/* <Input placeholder='Price' value={updateEmployee.price}
-                        onChange={(e) => setUpdateEmployee({ ...updateEmployee, price: e.target.value })}/> */}
+                        {/* <Input placeholder='Price' value={updateEmployee.position}
+                        onChange={(e) => setUpdateEmployee({ ...updateEmployee, position: e.target.value })}/> */}
                     </FormControl>
 
                 </ModalBody>
