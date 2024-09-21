@@ -8,12 +8,14 @@ import EmployeePage from './pages/EmployeePage.jsx'
 import { ChakraProvider } from '@chakra-ui/react';
 import Navbar from './components/Navbar.jsx'
 import SubmitForm from './pages/SubmitForm.jsx'
+import Chatbot from './components/Chatbot.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ChakraProvider>
       <BrowserRouter>
         <Navbar/>
+        <Chatbot/>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/admin" element={<AdminPage />} />
