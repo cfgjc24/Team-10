@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../index.css";
 import CheckInButtons from '../components/CheckInButtons.jsx'
-import WorkerMap from '../components/WorkerMap.jsx';
+import EmployeeMap from '../components/EmployeeMap';
 import { Card, CardBody, Heading } from '@chakra-ui/react'
 import Calendar from '../components/Calendar.jsx';
 import IdCard from '../components/IdCard.jsx';
@@ -45,7 +45,7 @@ function EmployeePage() {
             onClockOut={handleClockOut} 
             isClockIn={isClockIn} 
           />
-          <WorkerMap 
+          <EmployeeMap 
             newLocation={employeeLocation} 
             isClockIn={isClockIn} 
           />

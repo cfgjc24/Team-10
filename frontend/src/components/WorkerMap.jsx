@@ -5,6 +5,8 @@ import axios from 'axios';
 
 export default function SimpleMap() {
 
+  const API_URL = 'https://localhost:8000'
+
   const locations = [
   { latitude: 40.7128, longitude: -74.0060, label: "New York" }
 ];
@@ -12,7 +14,7 @@ export default function SimpleMap() {
   const fetchLocations = async () => {
     try {
       const response = await axios.get('http://localhost:8000/User/Locations/all');
-      console.log('Fetched locations:', response.data.locations);  // Log the data
+      console.log('Fetched locations:', response.data.locations);
     } catch (error) {
       console.error('Error fetching locations:', error);
     }
@@ -42,6 +44,12 @@ export default function SimpleMap() {
     <div>
       <h1 className="mb-4 text-2xl font-bold">Map</h1>
       <div id="map" style={{ height: '500px', width: '100%' }}></div>
+      <button
+        onClick={fetchLocations}
+        className="p-2 mt-4 text-white bg-blue-500 rounded"
+      >
+        Fetch and Log Locations
+      </button>
     </div>
   );
 }
