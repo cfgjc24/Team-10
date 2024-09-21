@@ -40,7 +40,7 @@ function EmployeePage() {
           <Calendar className="calendar-shadow" />
         </div>
         <div className="col right-side">
-          <CheckInButtons onClockIn={handleClockIn} onClockOut={handleClockOut} />
+          <CheckInButtons onClockIn={handleClockIn} onClockOut={handleClockOut} isClockIn={isClockIn} />
           <WorkerMap newLocation={employeeLocation} isClockIn={isClockIn} />
         </div>
       </div>

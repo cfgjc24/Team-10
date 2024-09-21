@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../index.css";
 
-function CheckInButtons({ onClockIn, onClockOut }) {
+function CheckInButtons({ onClockIn, onClockOut, isClockIn }) {
   const navigate = useNavigate();
-  const [isClockIn, setIsClockIn] = useState(false);
 
   const handleClockIn = () => {
     if ("geolocation" in navigator) {
@@ -19,7 +18,6 @@ function CheckInButtons({ onClockIn, onClockOut }) {
             location_type: 'clock_in'
           });
           console.log('Clock in successful:', response.data);
-          setIsClockIn(true);
           onClockIn({ id: response.data.id, latitude, longitude });
         } catch (error) {
           console.error('Error clocking in:', error);
@@ -33,7 +31,6 @@ function CheckInButtons({ onClockIn, onClockOut }) {
   };
 
   const handleClockOut = () => {
-    setIsClockIn(false);
     onClockOut();
     navigate("/submitform");
   };
