@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Mail } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = 'http://localhost:8000';  // Make sure this matches your Flask backend URL
 
@@ -11,6 +12,7 @@ const App = () => {
     password: '',
   });
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +24,9 @@ const App = () => {
 
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
-      setMessage(response.data.message);
       console.log('Login successful:', response.data);
+      // Redirect to the employee page
+      navigate('/employee');
     } catch (error) {
       setMessage(error.response?.data?.error || 'Login failed. Please check your email and password.');
       console.error('Login error:', error.response?.data);
