@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash, g
 from flask_cors import CORS
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -13,7 +13,7 @@ import os
 from datetime import datetime
 import logging
 
-import db  # Assuming this is your database module
+import db 
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -28,7 +28,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}}, supports_credentials=True)
 
 # Configuration
-app.config['SECRET_KEY'] = 'your_secret_key_here'  # Change this to a random secret key
+app.config['SECRET_KEY'] = 'your_secret_key_here' 
 app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for API usage
 app.config['DATABASE'] = 'mydatabase.db'
 
@@ -50,11 +50,13 @@ def init_db():
         try:
             cur = conn.cursor()
             cur.execute('''
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS clock_ins (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL
+                user_id INTEGER NOT NULL,
+                latitude REAL NOT NULL,
+                longitude REAL NOT NULL,
+                timestamp DATETIME NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users (id)
             )
             ''')
             conn.commit()
@@ -62,6 +64,7 @@ def init_db():
             logger.error(f"Database initialization error: {e}")
         finally:
             conn.close()
+
 
 # Initialize the database
 init_db()
@@ -250,6 +253,33 @@ def update_worker_status(id):
     user = DB.worker_manager.get_worker_by_id(id)
     return success_response({"worker": user})
 
+
+@app.route("/clock-in", methods=["POST"])
+def clock_in():
+    body = request.json
+    latitude = body.get("latitude")
+    longitude = body.get("longitude")
+    user_id = body.get("user_id")  # You might want to get this from the session instead
+
+    if not latitude or not longitude or not user_id:
+        return jsonify({"error": "Missing required data"}), 400
+
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO clock_ins (user_id, latitude, longitude, timestamp)
+            VALUES (?, ?, ?, ?)
+        """, (user_id, latitude, longitude, datetime.now()))
+        conn.commit()
+        id = cursor.lastrowid
+        return jsonify({"id": id, "message": "Clock-in recorded successfully"}), 201
+    except Exception as e:
+        logger.error(f"Error recording clock-in: {e}")
+        return jsonify({"error": "Error recording clock-in"}), 500
+
+
+
 @app.route("/worker/check_in/<int:id>", methods=["POST"])
 def update_worker_check_in(id):
     body = json.loads(request.data)
@@ -333,6 +363,20 @@ def get_all_admins():
     return success_response({"admin": admins})
 
 # Location endpoints
+
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(app.config['DATABASE'])
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+@app.teardown_appcontext
+def close_db(error):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
+
+
 @app.route("/location", methods=["POST"])
 def create_location():
     body = json.loads(request.data)
@@ -344,13 +388,32 @@ def create_location():
         return failure_response("Location or location type missing")
 
     location = (longitude, latitude)
-    id = DB.location_manager.insert_location(location, location_type)
-    return success_response({"id": id})
+    
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO locations (longitude, latitude, location_type)
+            VALUES (?, ?, ?)
+        """, (longitude, latitude, location_type))
+        conn.commit()
+        id = cursor.lastrowid
+        return success_response({"id": id})
+    except Exception as e:
+        logger.error(f"Error inserting location: {e}")
+        return failure_response("Error creating location")
 
 @app.route("/locations")
 def get_all_locations():
-    locations = DB.location_manager.get_all_locations()
-    return success_response({"locations": locations})
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM locations")
+        locations = cursor.fetchall()
+        return success_response({"locations": [dict(loc) for loc in locations]})
+    except Exception as e:
+        logger.error(f"Error fetching locations: {e}")
+        return failure_response("Error fetching locations")
 
 @app.route("/location/<int:id>")
 def get_location(id):
@@ -404,4 +467,15 @@ def delete_appointment_table(id):
     return success_response({"appointment": appointment})
 
 if __name__ == "__main__":
+    with app.app_context():
+        db = get_db()
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS locations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            longitude REAL NOT NULL,
+            latitude REAL NOT NULL,
+            location_type TEXT NOT NULL
+        )
+        ''')
+        db.commit()
     app.run(host="0.0.0.0", port=8000, debug=True)
