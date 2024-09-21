@@ -92,10 +92,10 @@ const AdminViewCard = ({ Employee }) => {
                     </FormControl>
 
                     <FormControl mt={4}>
-                        <FormLabel>Current Employment Status</FormLabel>
+                        <FormLabel>Current Position</FormLabel>
                         <Select placeholder='Select option'>
                             <option value='Manager'>Manager</option>
-                            <option value='Employee'>Employee</option>
+                            <option value='Provider'>Provider</option>
                         </Select>
                         {/* <Input placeholder='Price' value={updateEmployee.price}
                         onChange={(e) => setUpdateEmployee({ ...updateEmployee, price: e.target.value })}/> */}
