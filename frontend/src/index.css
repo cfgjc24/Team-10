@@ -5,16 +5,12 @@
     margin: 3em;
 }
 .left-side { 
-    border-style: dashed;
-    border-color: blue;
     width: 50%;
     height: 80vh;
     padding: 1em;
 }
 
 .right-side { 
-    border-style: dashed;
-    border-color: green;
     width: 50%;
     height: 80vh;
     padding: 1em;
@@ -22,5 +18,10 @@
 
 #buttons {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+.btn-list-item {
+    margin: 0.5em;
+    width: 50%;
 }
