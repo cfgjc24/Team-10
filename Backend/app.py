@@ -296,6 +296,32 @@ def update_worker_check_in(id):
     user = DB.worker_manager.get_worker_by_id(id)
     return success_response({"worker": user})
 
+
+@app.route("/worker/location/{id}", methods=["POST"])
+def update_worker_location(id):
+    """
+    Endpoint for updating worker location
+    """
+    body = json.loads(request.data)
+    latitude = body.get("latitude", None)
+    longitude = body.get("longitude", None)
+    point = None
+
+    if latitude and longitude:
+        point = (longitude, latitude)
+    
+    user = DB.worker_manager.get_worker_by_id(id)
+    if not user:
+        error = "User not found"
+        return failure_response(error)
+    
+    DB.worker_manager.update_worker_location(id, point)
+    DB.worker_manager.update_worker_updated_time(id)
+    user = DB.worker_manager.get_worker_by_id(id)
+
+    return success_response({"worker": user})
+
+
 # Client Endpoints
 @app.route("/client", methods=["POST"])
 def create_client():
