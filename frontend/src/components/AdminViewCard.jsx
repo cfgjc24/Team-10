@@ -7,11 +7,9 @@ const AdminViewCard = ({ Employee }) => {
   const toast = useToast();
 
   const handleEditEmployee = async (EmployeeId, updatedEmployee) => {
-    // Implementation of edit logic...
   };
 
   const handleDeleteEmployee = async (EmployeeId) => {
-    // Implementation of delete logic...
   };
 
   return (
@@ -20,7 +18,7 @@ const AdminViewCard = ({ Employee }) => {
         <Stack mt='6' spacing='3'>
           <Heading size='md'>{Employee.name}</Heading>
           <Text color='blue.600' fontSize='2xl'>
-            {Employee.status} {/* Assuming 'status' is a field in Employee */}
+            {Employee.status} {}
           </Text>
         </Stack>
       </CardBody>

@@ -13,7 +13,7 @@ export default function SimpleMap() {
 
   const fetchLocations = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/User/Locations/all');
+      const response = await axios.get('http://localhost:8000/UserLocations/all');
       console.log('Fetched locations:', response.data.locations);
     } catch (error) {
       console.error('Error fetching locations:', error);
