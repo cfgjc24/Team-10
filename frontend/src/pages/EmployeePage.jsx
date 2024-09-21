@@ -4,6 +4,8 @@ import "../index.css";
 import CheckInButtons from '../components/CheckInButtons.jsx'
 import Navbar from '../components/Navbar.jsx';
 import IdCard from '../components/IdCard.jsx';
+import {Heading} from '@chakra-ui/react'
+
 
 
 function EmployeePage() {
@@ -18,7 +20,7 @@ function EmployeePage() {
             </div>
             <div id="page-container">
                 <div className="col left-side">
-                    <h1>Current Patients</h1>
+                    <Heading>Current Patients</Heading>
                     <IdCard></IdCard>
                 </div>
                 <div className="col right-side">
