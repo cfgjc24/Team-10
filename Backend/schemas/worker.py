@@ -126,3 +126,12 @@ class WorkerManager:
             WHERE id = ?;
         """, (location, worker_id))
         self.conn.commit()
+
+    def active_worker_locations(self):
+        
+        cursor = self.conn.execute("SELECT id,name, location where status ='arrived' FROM workers ;")
+        result = []
+        for row in cursor:
+            result.append(row)
+        print(result)
+        return result
