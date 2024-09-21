@@ -10,6 +10,7 @@ import Navbar from './components/Navbar.jsx';
 import SubmitForm from './pages/SubmitForm.jsx';
 import Chatbot from './components/Chatbot.jsx';
 import SubmitReimbursementForm from './pages/SubmitReimbursementForm.jsx';
+import Signup from './pages/SignupPage.jsx';
 
 function Main() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function Main() {
         <Route path="/employee" element={<EmployeePage />} />
         <Route path="/submitform" element={<SubmitForm />} />
         <Route path="/reimbursement" element={<SubmitReimbursementForm />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   );
