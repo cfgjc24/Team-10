@@ -34,22 +34,6 @@ app.config['DATABASE'] = 'mydatabase.db'
 
 DB = db.DatabaseDriver()
 
-
-@app.before_request
-def handle_cors():
-    if request.method == 'OPTIONS':
-        response = app.make_response('')
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        return response
-
-@app.after_request
-def add_cors_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    return response
 # Database functions
 def get_db_connection():
     conn = None
@@ -62,24 +46,18 @@ def get_db_connection():
 
 def init_db():
     conn = get_db_connection()
-    if conn:
-        try:
-            cur = conn.cursor()
-            cur.execute('''
-            CREATE TABLE IF NOT EXISTS clock_ins (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                latitude REAL NOT NULL,
-                longitude REAL NOT NULL,
-                timestamp DATETIME NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users (id)
-            )
-            ''')
-            conn.commit()
-        except Error as e:
-            logger.error(f"Database initialization error: {e}")
-        finally:
-            conn.close()
+    cur = conn.cursor()
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )
+    ''')
+    conn.commit()
+    conn.close()
+
 
 
 # Initialize the database
@@ -312,32 +290,6 @@ def update_worker_check_in(id):
     user = DB.worker_manager.get_worker_by_id(id)
     return success_response({"worker": user})
 
-
-@app.route("/worker/location/{id}", methods=["POST"])
-def update_worker_location(id):
-    """
-    Endpoint for updating worker location
-    """
-    body = json.loads(request.data)
-    latitude = body.get("latitude", None)
-    longitude = body.get("longitude", None)
-    point = None
-
-    if latitude and longitude:
-        point = (longitude, latitude)
-    
-    user = DB.worker_manager.get_worker_by_id(id)
-    if not user:
-        error = "User not found"
-        return failure_response(error)
-    
-    DB.worker_manager.update_worker_location(id, point)
-    DB.worker_manager.update_worker_updated_time(id)
-    user = DB.worker_manager.get_worker_by_id(id)
-
-    return success_response({"worker": user})
-
-
 # Client Endpoints
 @app.route("/client", methods=["POST"])
 def create_client():
@@ -508,14 +460,6 @@ def delete_appointment_table(id):
     DB.client_manager.delete_appointment_from_table(id)
     return success_response({"appointment": appointment})
 
-@app.route("/UserLocations/all")
-def AllActiveUsers():
-    Data = DB.worker_manager.active_worker_locations()
-    if not Data:
-        return []
-    return Data
-
-
 if __name__ == "__main__":
     with app.app_context():
         db = get_db()
@@ -528,4 +472,4 @@ if __name__ == "__main__":
         )
         ''')
         db.commit()
-app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
