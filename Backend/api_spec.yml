@@ -122,7 +122,7 @@ paths:
                     example: You must log in first.
 
   /logout:
-    get:
+    post:
       summary: Log out a user
       description: Logs out the current user by clearing the session.
       responses:
