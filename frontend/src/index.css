@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* two col page setup*/
 #page-container {
     display: flex;
