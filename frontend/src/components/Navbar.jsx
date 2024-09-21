@@ -8,22 +8,17 @@ function Navbar() {
         <header>
             <div className="header">
                 <img className="logo" src={lodestarLogo} alt="Lodestar logo" />
-            </div>
-            {/* Use hr for a horizontal line */}
-            <hr className="line" />
-        
-
-            <Box padding={'2vh'}>
                 <Button
                     size='md'
                     height='48px'
                     width='200px'
                     border='2px'
                     borderColor='green.500'
+                    margin={'10px'}
                     >
                         Signout
                 </Button>
-            </Box>
+            </div>
         </header>
     );
 }
