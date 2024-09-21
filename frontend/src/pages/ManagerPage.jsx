@@ -1,7 +1,7 @@
-import React, { act } from 'react';
+import React from "react";
 import WorkerMap from '../components/WorkerMap';
 import IdCard from '../components/IdCard';
-import { Box, Heading, VStack } from '@chakra-ui/react'
+import { Box, Heading, VStack } from '@chakra-ui/react';
 
 const ManagerPage = () => {
     // function to fetch the Workers currently in the field
@@ -23,33 +23,41 @@ const ManagerPage = () => {
     // const activeWorkers = getActiveWorkers();
     // const inactiveWorkers = getInactiveWorkers();
 
-  return (
-    <Box>
-        <div id="page-container">
-            <div className="manager-left-side">
-                <VStack>
-                    <Heading>
-                        Active
-                    </Heading>
-                    {/* {activeWorkers.map((activeWorker) => ( */}
-                        <IdCard />
-                    {/* ))} */}
+    const activeWorkers = [
+        { _id: 1, name: "Alice Johnson"},
+        { _id: 2, name: "Bob Smith"},
+        { _id: 3, name: "Charlie Brown"},
+        { _id: 4, name: "Diana Prince"},
+    ];
 
-                    <Heading>
-                        Inactive
-                    </Heading>
+    const inactiveWorkers = [
+        { _id: 5, name: "Ethan Hunt"},
+        { _id: 6, name: "Fiona Apple"},
+        { _id: 7, name: "Maya Boyle"},
+    ];
 
-                    {/* {inactiveWorkers.map((inactiveWorker) => ( */}
-                        <IdCard />
-                    {/* ))} */}
-                </VStack>
+    return (
+        <Box>
+            <div id="page-container">
+                <div className="manager-left-side">
+                    <VStack spacing={4}>
+                        <Heading size="lg">Active</Heading>
+                        {activeWorkers.map((employee) => (
+                            <IdCard key={employee._id} Employee={employee} />
+                        ))}
+
+                        <Heading size="lg">Inactive</Heading>
+                        {inactiveWorkers.map((employee) => (
+                            <IdCard key={employee._id} Employee={employee} />
+                        ))}
+                    </VStack>
+                </div>
+                <div className="manager-right-side">
+                    <WorkerMap />
+                </div>
             </div>
-            <div className="manager-right-side">
-                <WorkerMap></WorkerMap>
-            </div>
-        </div>
-    </Box>
-  )
+        </Box>
+    );
 };
 
 export default ManagerPage;

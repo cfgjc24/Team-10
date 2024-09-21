@@ -1,15 +1,22 @@
 import { Card, CardBody, Stack, Heading, Text, Divider, CardFooter, Button, useToast, useDisclosure } from "@chakra-ui/react";
 import { Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter, Select } from '@chakra-ui/react';
+import { useState } from "react";
 import React from "react";
 
 const AdminViewCard = ({ Employee }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const [name, setMessage] = useState('');
+  const [status, setErrors] = useState({});
+
   const handleEditEmployee = async (EmployeeId, updatedEmployee) => {
+    // implement
+    onClose();
   };
 
   const handleDeleteEmployee = async (EmployeeId) => {
+    // implement
   };
 
   return (
@@ -38,7 +45,7 @@ const AdminViewCard = ({ Employee }) => {
                 </FormControl>
                 <FormControl mt={4}>
                   <FormLabel>Current Position</FormLabel>
-                  <Select defaultValue={Employee.status}>
+                  <Select defaultValue={Employee.status} placeholder='Select option'>
                     <option value='Manager'>Manager</option>
                     <option value='Provider'>Provider</option>
                   </Select>
