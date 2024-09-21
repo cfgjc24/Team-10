@@ -1,9 +1,9 @@
-import Form from "../components/Form";
+import MeetingForm from "../components/MeetingForm";
 
 function SubmitForm() {
     return(
         <div>
-            <Form></Form>
+            <MeetingForm></MeetingForm>
         </div>
     );
   }
