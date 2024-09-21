@@ -10,9 +10,22 @@
 }
 .left-side { 
     border-style: double;
-    width: 100%;
+    width: 30%;
     height: 80vh;
     padding: 1em;
+    padding-left: 10%;
+}
+.right-side { 
+    width: 30%;
+    height: 80vh;
+    padding: 1em;
+}
+
+.middle-side {
+    width: 30%;
+    height: 80vh;
+    padding: 1em;
+    /* background-color: blue; */
 }
 
 .manager-right-side { 
@@ -27,12 +40,6 @@
     border-style: dashed;
     border-color: green;
     width: 40%;
-    height: 80vh;
-    padding: 1em;
-}
-
-.right-side { 
-    width: 20%;
     height: 80vh;
     padding: 1em;
 }
@@ -52,11 +59,12 @@
     margin: 0.5em;
     width: 50%;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    height: 3em;
 }
 
 /*navbar*/
 .header {
-    padding: 1.5%;
+    padding: 1% 1.5%;
     display: flex;
     justify-content: space-between;
     /*background-color: rgba(33, 158, 188, 0.25)*/
@@ -74,4 +82,34 @@
 .custom-font { 
     font-size: 1rem; 
     font-style: italic;
+}
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+#map {
+    position: relative;
+    /* Relative positioning */
+    z-index: 1;
+    /* Lower z-index than the chatbot */
+}
+
+/* calendar.jsx */
+.calendar {
+    font-family: 'Raleway', sans-serif;
+    padding-left: 7%;
+    padding-right: 13%;
+    margin-top: 20px;
+}
+#v2 {
+    font-family: 'Raleway', sans-serif;
+}
+
+.instructions {
+    font-family: 'Raleway', sans-serif;
+    padding-left: 5%;
 }
