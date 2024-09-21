@@ -22,7 +22,7 @@ const Form = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="max-w-md p-6 mx-auto bg-white rounded-lg shadow-md">
+    <form id="form" onSubmit={formik.handleSubmit} className="max-w-md p-6 mx-auto bg-white rounded-lg shadow-md">
       <h2 className="mb-6 text-2xl font-bold text-center">Daily Summary Form</h2>
 
       <div className="mb-4">
