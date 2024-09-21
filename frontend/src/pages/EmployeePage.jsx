@@ -3,14 +3,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "../index.css";
 import CheckInButtons from '../components/CheckInButtons.jsx'
 
+
 function EmployeePage() {
     return(
-        <div id="page-container">
-            <div class="col left-side">
-                Column
+        <div>
+            <div id="banner">
+                <div className="alert alert-light" role="alert"> 
+                    Our impact: {open_case} open cases!
+                </div>
             </div>
-            <div class="col right-side">
-                <CheckInButtons></CheckInButtons>
+            <div id="page-container">
+                <div className="col left-side">
+                    Column
+                </div>
+                <div className="col right-side">
+                    <CheckInButtons></CheckInButtons>
+                </div>
             </div>
         </div>
     );

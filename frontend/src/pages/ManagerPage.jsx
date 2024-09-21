@@ -5,10 +5,10 @@ import IdCard from '../components/IdCard';
 const ManagerPage = () => {
   return (
     <div id="page-container">
-        <div class="col left-side">
+        <div className="col left-side">
             <IdCard></IdCard>
         </div>
-        <div class="col right-side">
+        <div className="col right-side">
             <EmployeeMap></EmployeeMap>
         </div>
     </div>
