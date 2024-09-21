@@ -5,7 +5,7 @@ const IdCard = () => {
   return (
     <Card w={'20vw'}>
       <CardBody>
-        <Heading fontSize={'large'}>Employee/Client</Heading>
+        <Heading fontSize={'large'}>Field Worker</Heading>
         <Text>Status</Text>
       </CardBody>
     </Card>
