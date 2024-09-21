@@ -16,6 +16,7 @@ class WorkerManager:
                                 last_update TIMESTAMP NOT NULL,
                                 check_in TIMESTAMP NULL,
                                 check_out TIMESTAMP NULL,
+                                location POINT NULL,
                                 FOREIGN KEY(manager) REFERENCES managers(id)
                             );""")
         self.conn.commit()
@@ -36,7 +37,7 @@ class WorkerManager:
         workers = []
         for row in cursor:
             workers.append({"id": row[0], "name": row[1], "manager": row[2], "status": row[3], 
-                            "last_update": row[4], "check_in": row[5], "check_out": row[6]})
+                            "last_update": row[4], "check_in": row[5], "check_out": row[6], "location": row[7]})
         return workers
 
     def get_worker_by_id(self, worker_id):
@@ -49,15 +50,15 @@ class WorkerManager:
                     "last_update": row[4], "check_in": row[5], "check_out": row[6]}
         return None
 
-    def insert_worker_table(self, name, manager_id):
+    def insert_worker_table(self, name, manager_id, location):
         """
         Inserts a new workers into the workers table with default values.
         """
         time_now = datetime.datetime.now()
         cursor = self.conn.execute("""
-            INSERT INTO workers (name, manager, status, last_update, check_in, check_out)
-            VALUES (?, ?, ?, ?, ?, ?);
-        """, (name, manager_id, 'away', time_now, None, None))
+            INSERT INTO workers (name, manager, status, last_update, check_in, check_out, location)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        """, (name, manager_id, 'away', time_now, None, None, location))
         
         self.conn.commit()
         return cursor.lastrowid
@@ -112,4 +113,16 @@ class WorkerManager:
             SET check_out = ?
             WHERE id = ?;
         """, (check_out_time, worker_id))
+        self.conn.commit()
+
+
+    def update_worker_location(self, worker_id, location):
+        """
+        Updates the location of a worker.
+        """
+        self.conn.execute("""
+            UPDATE workers
+            SET location = ?
+            WHERE id = ?;
+        """, (location, worker_id))
         self.conn.commit()

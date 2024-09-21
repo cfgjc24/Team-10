@@ -8,13 +8,14 @@ class AppointmentManager:
         """
         self.conn.execute("""CREATE TABLE IF NOT EXISTS appointments(
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                location POINT NULL,
+                                location INTEGER NOT NULL,
                                 worker_id INTEGER NOT NULL,
                                 client_id INTEGER NOT NULL,
                                 expected_start TIMESTAMP NOT NULL,
                                 expected_end TIMESTAMP NOT NULL,
                                 FOREIGN KEY(worker_id) REFERENCES workers(id),
-                                FOREIGN KEY(client_id) REFERENCES clients(id)
+                                FOREIGN KEY(client_id) REFERENCES clients(id),
+                                FOREIGN KEY(location) REFERENCES locations(id)
                             );""")
         self.conn.commit()
 

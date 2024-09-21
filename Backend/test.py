@@ -2,7 +2,7 @@ from db import DatabaseDriver
 
 def test_worker_manager(db_driver):
     print("Testing Worker Manager")
-    worker_id = db_driver.worker_manager.insert_worker_table("Alice", 1)
+    worker_id = db_driver.worker_manager.insert_worker_table("Alice", 1, None)
     print(f"Inserted Worker ID: {worker_id}")
     
     workers = db_driver.worker_manager.get_all_workers()
