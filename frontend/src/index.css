@@ -16,6 +16,22 @@
     background-color: aquamarine;
 }
 
+.manager-right-side { 
+    border-style: dashed;
+    border-color: green;
+    width: 60%;
+    height: 80vh;
+    padding: 1em;
+}
+
+.manager-left-side { 
+    border-style: dashed;
+    border-color: green;
+    width: 40%;
+    height: 80vh;
+    padding: 1em;
+}
+
 .right-side { 
     width: 20%;
     height: 80vh;
